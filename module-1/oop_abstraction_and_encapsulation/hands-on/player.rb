@@ -8,11 +8,11 @@ class Player
     end
 
     def to_s
-        return "#{@name} has #{@hitpoints} hitpoints and #{@attack_damage} attack"
+        return "#{@name} has #{@hitpoints} hitpoints and #{@attack_damage} attack damage."
     end
  
     def attacking_other(other_knight)
-        puts "#{@name} attack #{other_knight.name} with #{@attack_damage} points"
+        puts "#{@name} attacks #{other_knight.name} with #{@attack_damage} damage."
         other_knight.attacked_by_others(@attack_damage)
     end
     
