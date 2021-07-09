@@ -11,9 +11,9 @@ class Person
         return "#{@name} has #{@hitpoints} hitpoints and #{@attack_damage} attack damage."
     end
  
-    def attacking_other(other_knight)
-        puts "#{@name} attacks #{other_knight.name} with #{@attack_damage} damage."
-        other_knight.attacked_by_others(@attack_damage)
+    def attacking_other(other_person)
+        puts "#{@name} attacks #{other_person.name} with #{@attack_damage} damage."
+        other_person.attacked_by_others(@attack_damage)
     end
     
     def attacked_by_others(damage)
