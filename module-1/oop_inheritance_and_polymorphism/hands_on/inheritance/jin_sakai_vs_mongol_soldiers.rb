@@ -11,25 +11,25 @@ villains = [mongol_archer, mongol_swordsman, mongol_spearman]
 
 idx_turn = 1
 until jin_sakai.is_die? || villains.empty?
-    puts "============= Turn #{idx_turn} ============="
-    puts
+  puts "============= Turn #{idx_turn} ============="
+  puts
 
-    puts jin_sakai
-    villains.each do |villain|
-        puts villain
-    end
-    puts
+  puts jin_sakai
+  villains.each do |villain|
+    puts villain
+  end
+  puts
 
-    jin_sakai.attacking_other(villains[rand(villains.size)])
-    villains.each do |villain|
-        villains.delete(villain) if villain.is_die? || villain.is_flee?
-    end
-    puts
+  jin_sakai.attacking_other(villains[rand(villains.size)])
+  villains.each do |villain|
+    villains.delete(villain) if villain.is_die? || villain.is_flee?
+  end
+  puts
 
-    villains.each do |villain|
-        villain.attacking_other(jin_sakai)
-    end
-    puts
-    
-    idx_turn += 1
+  villains.each do |villain|
+    villain.attacking_other(jin_sakai)
+  end
+  puts
+
+  idx_turn += 1
 end
