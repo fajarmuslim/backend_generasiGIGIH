@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'sinatra/reloader'
 
+items_arr = [1,3,3]
 get '/hello' do
   'hello world!'
 end
@@ -42,6 +43,23 @@ post '/login' do
   else
     redirect '/login'
   end
+end
+
+get '/list' do
+  erb :list, locals: {
+    items: items_arr
+  }
+end
+
+get '/list_form' do
+  erb :list_form, locals: {
+    items: items_arr
+  }
+end
+
+post '/list_form' do
+  items_arr << params['item']
+  redirect '/list_form'
 end
 
 # 404 Error!

@@ -1,0 +1,8 @@
+<% for idx in (0..items.size-1) %>
+  <li> <%= items[idx] %> </li>
+<% end %>
+<form action="/list_form" method="POST">
+  <label for="item">add item:</label> </br>
+  <input type="text" id="item" name="item"> </br>
+  <input type="submit" value="submit">
+</form>
