@@ -32,6 +32,18 @@ end
 # they will redirect to '/messages/:name' . the rest of parameter is optional
 # http://localhost:4567/messages/fajar?color=green&key=value
 
+get '/login' do
+  erb :login
+end
+
+post '/login' do
+  if params['username'] == 'admin' && params['password'] == 'admin'
+    return 'success logged in!'
+  else
+    redirect '/login'
+  end
+end
+
 # 404 Error!
 not_found do
   status 404
