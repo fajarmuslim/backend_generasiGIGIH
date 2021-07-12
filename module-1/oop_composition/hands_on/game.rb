@@ -48,7 +48,7 @@ class Game
     end
 
     playable_character_choice_attack_villain = gets.chomp.to_i
-    if playable_character_choice_attack_villain > @non_playable_character[:villain].size
+    if playable_character_choice_attack_villain > @non_playable_character[:villains].size
       puts 'your input gonna wrong'
     else
       @playable_character.attacking_other(@non_playable_character[:villains][playable_character_choice_attack_villain - 1])
@@ -76,16 +76,15 @@ class Game
     print_idx_turn(idx_turn)
     print_playable_character_option
 
-    jin_sakai_choice = gets.chomp.to_i
-    if (jin_sakai_choice != 1) || (jin_sakai_choice != 2)
-      puts 'your input gonna wrong'
+    playable_character_choice = gets.chomp.to_i
+
+    case playable_character_choice
+    when 1
+      playable_character_attack
+    when 2
+      playable_character_heal
     else
-      case jin_sakai_choice
-      when 1
-        playable_character_attack
-      when 2
-        playable_character_heal
-      end
+      puts 'your input gonna wrong'
     end
 
     @non_playable_character[:heros].each do |hero|
