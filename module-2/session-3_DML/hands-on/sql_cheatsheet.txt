@@ -1,0 +1,47 @@
+select items.id, items.name, item_categories.category_id
+FROM items LEFT JOIN item_categories ON items.id = item_categories.item_id;
+
+select items.id, items.name, item_categories.category_id
+FROM items JOIN item_categories ON items.id = item_categories.item_id;
+
+select items.id, items.name, item_categories.category_id
+FROM items right JOIN item_categories ON items.id = item_categories.item_id;
+
+SHOW TABLES;
+
+select items.id, items.name, item_categories.category_id, categories.name
+FROM items JOIN item_categories ON items.id = item_categories.item_id JOIN categories ON item_categories.category_id = categories.id;
+
+select items.id, items.name 
+FROM items JOIN item_categories ON items.id = item_categories.item_id JOIN categories ON item_categories.category_id = categories.id
+WHERE categories.name='main dish';
+
+select items.id, items.name, items.price
+FROM items JOIN item_categories ON items.id = item_categories.item_id JOIN categories ON item_categories.category_id = categories.id
+WHERE categories.name='main dish' and items.price > 30000;
+
+select items.id, items.name, items.price
+FROM items LEFT JOIN item_categories ON items.id = item_categories.item_id WHERE item_categories.item_id IS NULL;
+
+
+select categories.id, categories.name, group_concat(items.name) AS "food", max(items.price) 
+AS "max food price" 
+FROM items
+LEFT JOIN item_categories ON items.id = item_categories.item_id
+LEFT JOIN categories ON item_categories.category_id = categories.id
+WHERE categories.name IS NOT NULL
+GROUP BY categories.id
+ORDER BY MAX(items.price) DESC;
+
+drop TABLE customers;
+ALTER TABLE items_categories modify item_id INT NOT NULL;
+ALTER TABLE items_categories modify category_id INT NOT NULL;
+ALTER TABLE item_categories;
+add foreign key (item_id) reference items(id);
+ALTER TABLE item_categories;
+add foreign key (category_id) reference categories(id);
+
+CREATE UNIQUE INDEX name ON categories (name);
+
+ALTER TABLE categories ADD PRIMARY KEY(id);
+ALTER TABLE categories modify id INT NOT NULL AUTO_INCREMENT;
