@@ -1,0 +1,113 @@
+mysql -u root -p
+SHOW DATABASES;
+CREATE DATABASES food_oms_db;
+SHOW DATABASES;
+use food_oms_db;
+SHOW TABLES;
+CREATE TABLE table_name (id INT);
+DESCRIBE table_name;
+CREATE TABLE categories (id INT);
+DESCRIBE categories;
+ALTER TABLE categories ADD PRIMARYRKEYR(50);
+ALTER TABLE categories ADD PRIMARY KEY(id);
+CREATE TABLE items(
+id INT NOT NULL,
+name VARCHAR(50) DEFAULT NULL, 
+price INT DEFAULT 0,
+PRIMARY KEY(id)
+);
+DESCRIBE items;
+SHOW TABLES;
+drop TABLE table_name;
+SHOW TABLES;
+drop DATABASES -> bisa dicoba kapan2
+CREATE TABLE item_categories(
+item_id INT,
+category_id INT
+);
+DESCRIBE item_categories;
+insert INTO items(id, name, price) VALUES (1, 'Nasi Goreng', 15000);
+insert INTO items(id, name) VALUES (2, 'Air Putih');
+insert INTO items VALUES(3,'Spageti', 40000);
+insert INTO items VALUES(4, 'Green Tea Latte', 18000);
+DESCRIBE items;
+SELECT * FROM items;
+DESCRIBE items;
+ALTER TABLE items modify id INT NOT NULL AUTO_INCREMENT;
+INSERT INTO items(name, price) VALUES('kebab turki', 15000);
+
+select * FROM items;
+select * FROM items WHERE price < 20000;
+select * FROM items WHERE price >= 15000 and price <= 25000;
+select * FROM items WHERE price between 15000 and 25000;
+select * FROM items WHERE name = 'French Fries'
+select * FROM items WHERE name LIKE'%Juice%'
+update items SET name = 'Nasi Goreng Gila' WHERE id = 1;
+select * FROM items;
+update items SET name = 'Ice Water', price = 2000 WHERE id = 1;
+select * FROM items;
+delete FROM items WHERE name = 'Mango Juice'
+select * FROM items;
+select * FROM items WHERE name LIKE'%Juice%';
+delete FROM items WHERE id = 6;
+insert INTO items (name, price) VALUES('Steak', 80000);
+insert INTO items (id, name, price) VALUES (6, 'Bread', 5000);
+insert INTO items (id, name, price) VALUES (6, 'Coca cola', 2000);
+insert INTO items (name, price) VALUES ('Vanilla Ice Cream', 13000), ('Cordon Blue', 36000)
+
+insert INTO categories (id, name) VALUES (1, 'main dish'), (2, 'beverage'), (3, 'dessert');
+
+ALTER TABLE item_categories ADD PRIMARY KEY(item_id);
+ALTER TABLE item_categories modify item_id INT NOT NULL AUTO_INCREMENT;
+
+insert INTO item_categories (category_id) VALUES (1),(2),(1),(2),(2),(3),(1);
+
+select items.id, items.name, item_categories.category_id
+FROM items LEFT JOIN item_categories ON items.id = item_categories.item_id;
+
+select items.id, items.name, item_categories.category_id
+FROM items JOIN item_categories ON items.id = item_categories.item_id;
+
+select items.id, items.name, item_categories.category_id
+FROM items right JOIN item_categories ON items.id = item_categories.item_id;
+
+SHOW TABLES;
+
+select items.id, items.name, item_categories.category_id, categories.name
+FROM items JOIN item_categories ON items.id = item_categories.item_id JOIN categories ON item_categories.category_id = categories.id;
+
+select items.id, items.name 
+FROM items JOIN item_categories ON items.id = item_categories.item_id JOIN categories ON item_categories.category_id = categories.id
+WHERE categories.name='main dish';
+
+select items.id, items.name, items.price
+FROM items JOIN item_categories ON items.id = item_categories.item_id JOIN categories ON item_categories.category_id = categories.id
+WHERE categories.name='main dish' and items.price > 30000;
+
+select items.id, items.name, items.price
+FROM items LEFT JOIN item_categories ON items.id = item_categories.item_id WHERE item_categories.item_id IS NULL;
+
+
+select categories.id, categories.name, group_concat(items.name) AS "food", max(items.price) 
+AS "max food price" 
+FROM items
+LEFT JOIN item_categories ON items.id = item_categories.item_id
+LEFT JOIN categories ON item_categories.category_id = categories.id
+WHERE categories.name IS NOT NULL
+GROUP BY categories.id
+ORDER BY MAX(items.price) DESC;
+
+drop TABLE customers;
+ALTER TABLE items_categories modify item_id INT NOT NULL;
+ALTER TABLE items_categories modify category_id INT NOT NULL;
+ALTER TABLE item_categories;
+add foreign key (item_id) reference items(id);
+ALTER TABLE item_categories;
+add foreign key (category_id) reference categories(id);
+
+CREATE UNIQUE INDEX name ON categories (name);
+
+ALTER TABLE categories ADD PRIMARY KEY(id);
+ALTER TABLE categories modify id INT NOT NULL AUTO_INCREMENT;
+
+
