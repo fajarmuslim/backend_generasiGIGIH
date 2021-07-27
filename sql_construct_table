@@ -1,0 +1,114 @@
+CREATE DATABASE food_oms_db;
+
+USE food_oms_db;
+
+CREATE TABLE categories (
+id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+name CHAR(50) NOT NULL
+);
+
+INSERT INTO categories (name) VALUES 
+("main dish"),
+("beverage"),
+("dessert"),
+("traditional"),
+("modern");
+
+CREATE TABLE items (
+id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+name CHAR(50) NOT NULL,
+price INT NOT NULL
+);
+
+INSERT INTO items (name, price) VALUES 
+("Nasi Goreng Gila",25000),
+("Ice Water", 2000),
+("Spaghetti", 40000),
+("Grean Tea Latte", 18000),
+("Orange Juice", 15000),
+("Vanilla Ice Cream", 13000),
+("Cordon Blue", 36000);
+
+CREATE TABLE item_categories (
+item_id INT NOT NULL,
+category_id INT NOT NULL
+);
+
+INSERT INTO item_categories (item_id, category_id) VALUES 
+(1,1),
+(1,4),
+(2,2),
+(3,1),
+(3,5),
+(4,2),
+(4,5),
+(5,2),
+(5,5),
+(6,3),
+(6,5),
+(7,1),
+(7,5);
+
+ALTER TABLE item_categories ADD FOREIGN KEY (item_id) REFERENCES items(id);
+
+ALTER TABLE item_categories ADD FOREIGN KEY (category_id) REFERENCES categories(id);
+
+CREATE TABLE customers (
+id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+name CHAR(50) NOT NULL, 
+phone CHAR(20) NOT NULL);
+
+INSERT INTO customers (name, phone) VALUES 
+("Budiawan", 80123123123),
+("Mary Jones", 81123123123),
+("Bima", 82123123123),
+("Janaka", 83123123123),
+("Sadewa", 84123123123);
+
+CREATE TABLE orders (
+id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+customer_id INT NOT NULL, 
+date DATETIME NOT NULL, 
+total_price INT NOT NULL
+);
+
+ALTER TABLE orders ADD FOREIGN KEY (customer_id) REFERENCES customers(id);
+
+INSERT INTO orders (customer_id, date, total_price) VALUES
+(1,"2021-07-01 1:01:01",52000),
+(1,"2021-07-01 2:02:02",71000),
+(2,"2021-07-01 3:03:03",72000),
+(2,"2021-07-01 4:04:04",15000),
+(3,"2021-07-01 5:05:05",36000);
+
+CREATE TABLE order_details (
+order_id INT NOT NULL, 
+item_id INT NOT NULL, 
+quantity INT NOT NULL
+);
+
+ALTER TABLE order_details ADD FOREIGN KEY (item_id) REFERENCES items(id);
+ALTER TABLE order_details ADD FOREIGN KEY (order_id) REFERENCES orders(id);
+
+INSERT INTO order_details (order_id, item_id, quantity) VALUES 
+(1,1,2), 
+(1,2,1), 
+(2,4,1), 
+(2,3,1), 
+(2,6,1), 
+(3,7,2), 
+(4,5,1), 
+(5,4,2);
+
+SELECT 
+orders.id AS 'order id', 
+orders.order_date AS 'order date', 
+customers.name AS 'customer name', 
+customers.phone AS 'customer phone', 
+orders.total_price AS 'total', 
+GROUP_CONCAT(items.name) AS 'items bought'
+FROM customers 
+JOIN orders ON customers.id = orders.customer_id 
+JOIN order_details ON order_details.order_id = orders.id 
+JOIN items ON order_details.item_id = items.id
+GROUP BY order_details.order_id;
