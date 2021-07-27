@@ -1,0 +1,24 @@
+<body>
+<h1>
+  Create new order
+</h1>
+
+<form method="POST" action="/order" id="create_order">
+  <p>Select the customer for this order</p>
+  <% customers.each do |customer| %>
+    <input type="radio" name="customer_id" value=<%= customer.id %>>
+    <label for="<%= customer.id %>"> <%= customer.name %> </label><br>
+  <% end %>
+  <br/>
+
+  <p>item</p>
+  <% for i in 0..items.length-1 do  %>
+    <input name="<%= items[i].id %>_quantity_price_<%= items[i].price %>" type="number" placeholder="quantity" value=0 min=0>
+    <%= items[i].name %>
+    <%= items[i].price %>
+    <br/>
+  <% end %>
+  <br/>
+  <button type="submit"> Add order</button>
+</form>
+</body>

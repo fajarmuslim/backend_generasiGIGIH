@@ -1,0 +1,23 @@
+<h1>Order Detail</h1>
+<p>Customer id: <%= order.customer_id %></p>
+<p>Date: <%= order.date  %> </p>
+<p>Total price: <%= order.total_price  %> </p>
+<p>Details:
+<table>
+  <thead>
+    <th align="left">item</th>
+    <th align= "left">price</th>
+    <th align= "left">quantity</th>
+  </thead>
+
+  <tbody>
+    <% order.details.each do |order_detail| %>
+      <tr>
+        <td><%= order_detail.item.name %></td>
+        <td><%= order_detail.item.price %></td>
+        <td><%= order_detail.quantity %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</p>

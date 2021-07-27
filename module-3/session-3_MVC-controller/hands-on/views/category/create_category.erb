@@ -1,0 +1,16 @@
+<body>
+<h1>
+  Create new category
+</h1>
+
+<form method="POST" action="/category" id="create_category">
+  <input name="name" type="text" placeholder="category name"/>
+  <p>Select the items for this categories</p>
+  <% items.each do |item| %>
+    <input type="checkbox" name="<%= item.id %>" value=<%= item.id %>>
+    <label for="<%= item.id %>"> <%= item.name %> </label><br>
+  <% end %>
+  <br/>
+  <button type="submit"> Add category</button>
+</form>
+</body>

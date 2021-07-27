@@ -1,0 +1,25 @@
+<h1>Customers</h1>
+
+<table>
+  <thead>
+  <th>Name</th>
+  <th>Phone Number</th>
+  </thead>
+  <tbody>
+  <% customers.each do |customer| %>
+    <tr>
+      <td><%= customer.name %></td>
+      <td><%= customer.phone %></td>
+      <td><a href="/customer/<%= customer.id %>"> show </a></td>
+      <td><a href="/edit_customer/<%= customer.id %>"> edit </a></td>
+      <td>
+        <form method="post" action="/customer/<%= customer.id %>">
+          <input type="hidden" name="_method" value="delete"/>
+          <button type="submit"> delete</button>
+        </form>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+<a href="/create_customer"> new customer </a>

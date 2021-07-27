@@ -1,0 +1,26 @@
+<h1>Customer Detail</h1>
+<p>Name: <%= customer.name %></p>
+<p>Phone: <%= customer.phone  %> </p>
+<p>Orders: </p>
+<% if customer.orders.length != 0 %>
+<table>
+  <thead>
+    <th>order_id</th>
+    <th>order_date</th>
+    <th>total_price</th>
+  </thead>
+  <tbody>
+    <% customer.orders.each do |order| %>
+      <tr>
+        <td><%= order.id %></td>
+        <td><%= order.date %></td>
+        <td><%= order.total_price %></td>
+<!--        TBD-->
+        <td><a href="/order/<%= order.id %>">view details</a></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% else %>
+  <p>-</p>
+<% end %>

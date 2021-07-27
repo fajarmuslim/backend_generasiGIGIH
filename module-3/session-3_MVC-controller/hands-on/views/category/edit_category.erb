@@ -1,0 +1,22 @@
+<h1>Edit Category</h1>
+<form method="POST" action="/category/<%= category.id %>" id="edit_category">
+  <input type="hidden" name="_method" value ="put"/>
+  <input name="id" type="text" value="<%= category.id %>" style="display:none"/>
+  <input name="name" type="text" value="<%= category.name %>"/>
+  <p>Select the items for this category</p>
+  <% item_ids = [] %>
+  <% category.items.each do |item|%>
+    <% item_ids << item.id %>
+  <% end %>
+  <% items.each do |item| %>
+    <% if item_ids.include?item.id %>
+      <input type="checkbox" checked name="<%= item.id %>" value=<%= item.id %>>
+      <label for="<%= item.id %>"> <%= item.name %> </label><br>
+    <% else %>
+      <input type="checkbox" name="<%= item.id %>" value=<%= item.id %>>
+      <label for="<%= item.id %>"> <%= item.name %> </label><br>
+    <% end %>
+  <% end %>
+  <br/>
+  <button type="submit">update</button>
+</form>

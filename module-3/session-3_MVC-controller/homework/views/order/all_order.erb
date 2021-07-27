@@ -1,0 +1,27 @@
+<h1>orders</h1>
+
+<table>
+  <thead>
+  <th>Customer id</th>
+  <th>Date</th>
+  <th>Total price</th>
+  </thead>
+  <tbody>
+  <% orders.each do |order| %>
+    <tr>
+      <td><%= order.customer_id %></td>
+      <td><%= order.date %></td>
+      <td><%= order.total_price %></td>
+      <td> <a href="/order/<%= order.id %>"> show </a> </td>
+      <td> <a href="/edit_order/<%= order.id %>"> edit </a> </td>
+      <td>
+        <form method="post" action="/order/<%= order.id %>">
+          <input type="hidden" name="_method" value ="delete"/>
+          <button type="submit"> delete </button>
+        </form>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+<a href="/create_order"> new order </a>
