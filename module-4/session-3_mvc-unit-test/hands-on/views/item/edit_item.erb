@@ -1,0 +1,23 @@
+<h1>Edit <%= item.name %></h1>
+<form method="POST" action="/item/<%= item.id %>" id="edit_item">
+  <input type="hidden" name="_method" value ="put"/>
+  <input name="id" type="text" value="<%= item.id %>" style="display:none"/>
+  <input name="name" type="text" value="<%= item.name %>"/>
+  <input name="price" type="text" value="<%= item.price %>"/>
+  <p>Select the categories for this items</p>
+  <% category_ids = [] %>
+  <% item.categories.each do |category|%>
+    <% category_ids << category.id %>
+  <% end %>
+  <% categories.each do |category| %>
+    <% if category_ids.include?category.id %>
+      <input type="checkbox" checked name="<%= category.id %>" value=<%= category.id %>>
+      <label for="<%= category.id %>"> <%= category.name %> </label><br>
+    <% else %>
+      <input type="checkbox" name="<%= category.id %>" value=<%= category.id %>>
+      <label for="<%= category.id %>"> <%= category.name %> </label><br>
+    <% end %>
+  <% end %>
+  <br/>
+  <button type="submit">update</button>
+</form>

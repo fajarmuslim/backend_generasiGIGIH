@@ -1,0 +1,46 @@
+<body>
+<h1>
+  Edit order
+</h1>
+
+<form method="POST" action="/order/<%= order.id %>" id="edit_order">
+  <input type="hidden" name="_method" value ="put"/>
+  <input name="order_id" type="text" value="<%= order.id %>" style="display:none"/>
+  <p>Select the customer for this order</p>
+  <% customers.each do |customer| %>
+    <% if customer.id == order.customer_id %>
+      <input checked type="radio" name="customer_id" value=<%= customer.id %>>
+      <label for="<%= customer.id %>"> <%= customer.name %> </label><br>
+    <% else %>
+      <input type="radio" name="customer_id" value=<%= customer.id %>>
+      <label for="<%= customer.id %>"> <%= customer.name %> </label><br>
+    <% end %>
+  <% end %>
+  <br/>
+
+  <% prev_item_ids = [] %>
+  <% order.details.each do |detail|%>
+    <% prev_item_ids << detail.item.id %>
+  <% end %>
+
+  <p>item</p>
+  <% for i in 0..items.length-1 do  %>
+    <% idx = -1 %>
+    <% (0..prev_item_ids.length-1).each do |j| %>
+      <% if prev_item_ids[j] == items[i].id %>
+        <% idx = j %>
+      <% end %>
+    <% end %>
+    <% if idx == -1 %>
+      <input name="<%= items[i].id %>_quantity_price_<%= items[i].price %>" type="number" placeholder="quantity" value=0 min=0>
+    <% else %>
+      <input name="<%= items[i].id %>_quantity_price_<%= items[i].price %>" type="number" placeholder="quantity" value=<%= order.details[idx].quantity %> min=0>
+    <% end %>
+    <%= items[i].name %>
+    <%= items[i].price %>
+    <br/>
+  <% end %>
+  <br/>
+  <button type="submit"> Edit order</button>
+</form>
+</body>
