@@ -14,6 +14,18 @@ describe Item do
 
         expect(item.valid?).to eq(true)
       end
+
+      it 'not valid input' do
+        item = Item.new({
+                          id: 1,
+                          price: 1000
+                        })
+
+
+        expect(item.valid?).to eq(false)
+      end
+
+
     end
   end
 end
