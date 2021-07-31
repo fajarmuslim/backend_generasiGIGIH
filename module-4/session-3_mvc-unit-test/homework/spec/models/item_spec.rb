@@ -218,7 +218,6 @@ describe Item do
         allow(mock_client).to receive(:query).with('SELECT * FROM items WHERE id = 3').and_return(query_result_mock_item_2)
         allow(mock_client).to receive(:query).with('SELECT * FROM items WHERE id = 7').and_return(query_result_mock_item_3)
 
-
         item_1 = Item.new({ id: 1, name: "Nasi Goreng Gila", price: 25000 })
         item_2 = Item.new({ id: 3, name: "Spaghetti", price: 40000 })
         item_3 = Item.new({ id: 7, name: "Cordon Blue", price: 36000 })
@@ -233,6 +232,22 @@ describe Item do
           expect(actual_result[i].price).to eq(expected_result[i].price)
           expect(actual_result[i].categories).to eq(expected_result[i].categories)
         end
+      end
+    end
+  end
+
+  describe '.find_id_with_name_and_price' do
+    context 'find id based on name and price' do
+      it 'should returning id based on name and price' do
+        query_result_mock_item = [{ "id" => 1, "name" => "Nasi Goreng Gila", "price" => 25000 }]
+
+        mock_client = double
+        allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+        allow(mock_client).to receive(:query).with("SELECT id FROM items WHERE name = 'Nasi Goreng Gila' AND price = 25000").and_return(query_result_mock_item)
+
+        actual_id = Item.find_id_with_name_and_price('Nasi Goreng Gila', 25000)
+        expected_id = 1
+        expect(actual_id).to eq(expected_id)
       end
     end
   end
