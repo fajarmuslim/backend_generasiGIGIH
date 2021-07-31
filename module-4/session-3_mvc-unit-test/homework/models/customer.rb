@@ -13,6 +13,7 @@ class Customer
   def self.find_all
     client = create_db_client
     result = client.query('SELECT * FROM customers')
+    puts result.each
     convert_sql_result_to_array(result)
   end
 
