@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../../models/item'
 require_relative '../../db/mysql_connector'
 
@@ -141,6 +143,39 @@ describe Item do
     end
   end
 
+  describe '.find_all' do
+    context 'find all items' do
+      it 'should returning all items from db' do
+        query_result_mock = [
+          { "id" => 1, "name" => "Nasi Goreng Gila", "price" => 25000 },
+          { "id" => 2, "name" => "Ice Water", "price" => 2000 },
+          { "id" => 3, "name" => "Spaghetti", "price" => 40000 }
+        ]
+
+        mock_client = double
+        allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+        allow(mock_client).to receive(:query).with('SELECT * FROM items').and_return(query_result_mock)
+
+        actual_result = Item.find_all
+        expected_item_1 = Item.new({ id: 1, name: "Nasi Goreng Gila", price: 25000 })
+        expected_item_2 = Item.new({ id: 2, name: "Ice Water", price: 2000 })
+        expected_item_3 = Item.new({ id: 3, name: "Spaghetti", price: 40000 })
+
+        expected_result = [
+          expected_item_1,
+          expected_item_2,
+          expected_item_3
+        ]
+
+        expect(expected_result.size).to eq(actual_result.size)
+        (0..expected_result.size - 1).each  do | i |
+          expect(actual_result[i].id).to eq(expected_result[i].id)
+          expect(actual_result[i].name).to eq(expected_result[i].name)
+          expect(actual_result[i].price).to eq(expected_result[i].price)
+          expect(actual_result[i].categories).to eq(expected_result[i].categories)
+        end
+
+      end
+    end
+  end
 end
-
-
