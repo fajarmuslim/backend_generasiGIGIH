@@ -123,6 +123,24 @@ describe Item do
     end
   end
 
+  describe '.save_category_items' do
+    context 'save items of an category' do
+      it 'should save items of an category into db' do
+        item_ids = [1, 2, 3]
+        category_id = 1
+
+        mock_client = double
+        allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+
+        item_ids.each do |item_id|
+          expect(mock_client).to receive(:query).with("INSERT INTO item_categories (item_id, category_id) VALUES (#{item_id}, #{category_id})")
+        end
+
+        Item.save_category_items(category_id, item_ids)
+      end
+    end
+  end
+
 end
 
 
