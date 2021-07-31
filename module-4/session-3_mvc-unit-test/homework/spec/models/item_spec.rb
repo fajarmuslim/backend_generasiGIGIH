@@ -103,6 +103,26 @@ describe Item do
       end
     end
   end
+
+  describe '#save' do
+    context 'valid input' do
+      it 'should save data to db' do
+        params = {
+          name: 'Nasi Uduk',
+          price: 1000
+        }
+
+        item = Item.new(params)
+
+        mock_client = double
+        allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+
+        expect(mock_client).to receive(:query).with("INSERT INTO items(name, price) VALUES ('#{item.name}', #{item.price})")
+        item.save
+      end
+    end
+  end
+
 end
 
 
