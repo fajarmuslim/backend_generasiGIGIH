@@ -34,23 +34,4 @@ describe CustomerController do
       end
     end
   end
-  # describe '#create_customer' do
-  #   context 'create customer success' do
-  #     it 'should create customer success' do
-  #       params = {
-  #         name: 'Fajar Muslim',
-  #         phone: 8999999
-  #       }
-  #
-  #       controller = CustomerController.new
-  #
-  #       response = controller.create_customer(params)
-  #
-  #       client = create_db_client
-  #       client.query("INSERT INTO customers(name, phone) VALUES ('#{params.name}', #{params.phone})")
-  #
-  #       expect(expected_view).to eq(actual_view)
-  #     end
-  #   end
-  # end
 end
