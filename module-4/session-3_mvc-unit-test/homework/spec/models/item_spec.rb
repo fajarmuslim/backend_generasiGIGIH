@@ -168,13 +168,71 @@ describe Item do
         ]
 
         expect(expected_result.size).to eq(actual_result.size)
-        (0..expected_result.size - 1).each  do | i |
+        (0..expected_result.size - 1).each do |i|
           expect(actual_result[i].id).to eq(expected_result[i].id)
           expect(actual_result[i].name).to eq(expected_result[i].name)
           expect(actual_result[i].price).to eq(expected_result[i].price)
           expect(actual_result[i].categories).to eq(expected_result[i].categories)
         end
+      end
+    end
+  end
 
+  describe '.find_item_by_id' do
+    context 'find single item by id' do
+      it 'should returning single item based on id' do
+        query_result_mock = [{ "id" => 1, "name" => "Nasi Goreng Gila", "price" => 25000 }]
+
+        mock_client = double
+        allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+        allow(mock_client).to receive(:query).with('SELECT * FROM items WHERE id = 1').and_return(query_result_mock)
+
+        actual_result = Item.find_item_by_id(1)
+        expected_result = Item.new({ id: 1, name: "Nasi Goreng Gila", price: 25000 })
+
+        expect(actual_result.id).to eq(expected_result.id)
+        expect(actual_result.name).to eq(expected_result.name)
+        expect(actual_result.price).to eq(expected_result.price)
+        expect(actual_result.categories).to eq(expected_result.categories)
+      end
+    end
+  end
+
+  describe '.find_items_by_category_id' do
+    context 'find items of a category based on category_id' do
+      it 'should returning items based on category_id' do
+        query_result_mock_item_categories = [
+          { "item_id" => 1, "category_id" => 1 },
+          { "item_id" => 3, "category_id" => 1 },
+          { "item_id" => 7, "category_id" => 1 }
+        ]
+
+        query_result_mock_item_1 = [{ "id" => 1, "name" => "Nasi Goreng Gila", "price" => 25000 }]
+        query_result_mock_item_2 = [{ "id" => 3, "name" => "Spaghetti", "price" => 40000 }]
+        query_result_mock_item_3 = [{ "id" => 7, "name" => "Cordon Blue", "price" => 36000 }]
+
+        mock_client = double
+        allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+        allow(mock_client).to receive(:query).with('SELECT * FROM item_categories WHERE category_id = 1').and_return(query_result_mock_item_categories)
+        allow(mock_client).to receive(:query).with('SELECT * FROM items WHERE id = 1').and_return(query_result_mock_item_1)
+        allow(mock_client).to receive(:query).with('SELECT * FROM items WHERE id = 3').and_return(query_result_mock_item_2)
+        allow(mock_client).to receive(:query).with('SELECT * FROM items WHERE id = 7').and_return(query_result_mock_item_3)
+
+
+        item_1 = Item.new({ id: 1, name: "Nasi Goreng Gila", price: 25000 })
+        item_2 = Item.new({ id: 3, name: "Spaghetti", price: 40000 })
+        item_3 = Item.new({ id: 7, name: "Cordon Blue", price: 36000 })
+
+        expected_result = [item_1, item_2, item_3]
+        actual_result = Item.find_items_by_category_id(1)
+
+        expect(expected_result.size).to eq(actual_result.size)
+        (0..expected_result.size - 1).each do |i|
+          expect(actual_result[i].id).to eq(expected_result[i].id)
+          expect(actual_result[i].name).to eq(expected_result[i].name)
+          expect(actual_result[i].price).to eq(expected_result[i].price)
+          expect(actual_result[i].categories).to eq(expected_result[i].categories)
+        end
       end
     end
   end
