@@ -1,5 +1,5 @@
-require_relative '../controllers/customer_controller'
-require_relative '../db/mysql_connector'
+require_relative '../../controllers/customer_controller'
+require_relative '../../db/mysql_connector'
 
 describe CustomerController do
   describe '#show_all' do

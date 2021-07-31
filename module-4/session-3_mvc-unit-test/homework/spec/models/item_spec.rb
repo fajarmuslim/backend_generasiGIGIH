@@ -1,5 +1,5 @@
-require_relative '../models/item'
-require_relative '../db/mysql_connector'
+require_relative '../../modelsitem'
+require_relative '../../db/mysql_connector'
 
 describe Item do
   describe '#valid?' do
