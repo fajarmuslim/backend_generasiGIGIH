@@ -58,6 +58,20 @@ describe Item do
         expect(item.price).to eq(params [:price])
         expect(item.categories).to eq([])
       end
+
+      it 'valid input: id nil' do
+        params = {
+          name: 'Nasi uduk',
+          price: 1000
+        }
+
+        item = Item.new(params)
+
+        expect(item.id).to eq(nil)
+        expect(item.name).to eq(params [:name])
+        expect(item.price).to eq(params [:price])
+        expect(item.categories).to eq([])
+      end
     end
   end
 end
