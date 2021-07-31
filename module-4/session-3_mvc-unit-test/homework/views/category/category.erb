@@ -1,0 +1,8 @@
+<h1>Category Detail</h1>
+<p>Category name: <%= category.name %></p>
+<p>Items:
+  <% for i in (0..category.items.length-2) do %>
+    <%= category.items[i].name %>,
+  <% end %>
+  <%= category.items[category.items.length-1].name %>
+</p>

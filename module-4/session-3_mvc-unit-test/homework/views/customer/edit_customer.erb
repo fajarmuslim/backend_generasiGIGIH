@@ -1,0 +1,8 @@
+<h1>Edit Customer</h1>
+<form method="POST" action="/customer/<%= customer.id %>" id="edit_customer">
+  <input type="hidden" name="_method" value="put"/>
+  <input name="id" type="text" value="<%= customer.id %>" style="display:none"/>
+  <input name="name" type="text" value="<%= customer.name %>"/>
+  <input name="phone" type="text" value="<%= customer.phone %>"/>
+  <button type="submit">update</button>
+</form>

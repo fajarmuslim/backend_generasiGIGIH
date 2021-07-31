@@ -1,0 +1,17 @@
+<body>
+<h1>
+  Create new item
+</h1>
+
+<form method="POST" action="/item" id="create_item">
+  <input name="name" type="text" placeholder="item name"/>
+  <input name="price" type="text" placeholder="item price"/>
+  <p>Select the categories for this items</p>
+  <% categories.each do |category| %>
+    <input type="checkbox" name="<%= category.id %>" value=<%= category.id %>>
+    <label for="<%= category.id %>"> <%= category.name %> </label><br>
+  <% end %>
+  <br/>
+  <button type="submit"> Add Item</button>
+</form>
+</body>
