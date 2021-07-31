@@ -251,4 +251,31 @@ describe Item do
       end
     end
   end
+
+  describe '.convert_sql_result_to_array' do
+    context 'convert sql result into an array' do
+      it 'should returning an array of item object' do
+        sql_result = [
+          { "id" => 1, "name" => "Nasi Goreng Gila", "price" => 25000 },
+          { "id" => 2, "name" => "Ice Water", "price" => 2000 },
+          { "id" => 3, "name" => "Spaghetti", "price" => 40000 }
+        ]
+
+        expected_item_1 = Item.new({ id: 1, name: "Nasi Goreng Gila", price: 25000 })
+        expected_item_2 = Item.new({ id: 2, name: "Ice Water", price: 2000 })
+        expected_item_3 = Item.new({ id: 3, name: "Spaghetti", price: 40000 })
+
+        actual_array = Item.convert_sql_result_to_array(sql_result)
+        expected_array = [expected_item_1, expected_item_2, expected_item_3]
+
+        expect(expected_array.size).to eq(actual_array.size)
+        (0..expected_array.size - 1).each do |i|
+          expect(actual_array[i].id).to eq(expected_array[i].id)
+          expect(actual_array[i].name).to eq(expected_array[i].name)
+          expect(actual_array[i].price).to eq(expected_array[i].price)
+          expect(actual_array[i].categories).to eq(expected_array[i].categories)
+        end
+      end
+    end
+  end
 end
