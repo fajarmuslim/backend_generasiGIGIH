@@ -5,6 +5,6 @@ def create_db_client
     host: 'localhost',
     username: 'root',
     password: 'generasiGIGIH100%',
-    database: 'food_oms_db'
+    database: 'food_oms_db_test'
   )
 end
