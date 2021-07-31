@@ -312,8 +312,8 @@ describe Item do
   end
 
   describe '.delete_item_categories_item_ids' do
-    context 'delete categories of an item based on item id' do
-      it 'should success delete categories of an item based on item id' do
+    context 'delete categories of an item' do
+      it 'should success delete categories of an item' do
         category_id = 1
         item_ids = [1,2,3]
 
@@ -325,6 +325,24 @@ describe Item do
         end
 
         Item.delete_item_categories_item_ids(category_id, item_ids)
+      end
+    end
+  end
+
+  describe '.save_item_categories_item_ids' do
+    context 'save categories of an item' do
+      it 'should success save categories of an item' do
+        category_id = 1
+        item_ids = [1,2,3]
+
+        mock_client = double
+        allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+
+        item_ids.each do |item_id|
+          expect(mock_client).to receive(:query).with("INSERT INTO item_categories (item_id, category_id) VALUES (#{item_id}, #{category_id})")
+        end
+
+        Item.save_item_categories_item_ids(category_id, item_ids)
       end
     end
   end
