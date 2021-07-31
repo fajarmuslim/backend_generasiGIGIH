@@ -278,4 +278,21 @@ describe Item do
       end
     end
   end
+
+  describe '.update_item' do
+    context 'update an item' do
+      it 'should success update an item' do
+        params = {
+          id: 1,
+          name: 'Nasi uduk',
+          price: 1000
+        }
+        mock_client = double
+        allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+        expect(mock_client).to receive(:query).with("UPDATE items SET name = '#{params['name']}', price = #{params['price']} WHERE id = #{params['id']}")
+
+        Item.update_item(params)
+      end
+    end
+  end
 end
