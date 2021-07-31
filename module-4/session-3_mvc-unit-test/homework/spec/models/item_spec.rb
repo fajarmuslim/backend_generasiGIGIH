@@ -295,4 +295,19 @@ describe Item do
       end
     end
   end
+
+  describe '.delete_item' do
+    context 'delete an item' do
+      it 'should success delete an item' do
+        id = 1
+
+        mock_client = double
+        allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+        expect(mock_client).to receive(:query).with("DELETE FROM item_categories WHERE item_id = #{id}")
+        expect(mock_client).to receive(:query).with("DELETE FROM items WHERE id = #{id}")
+
+        Item.delete_item(id)
+      end
+    end
+  end
 end
