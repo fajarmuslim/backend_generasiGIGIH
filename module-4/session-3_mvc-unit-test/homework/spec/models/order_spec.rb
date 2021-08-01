@@ -1,4 +1,5 @@
 require_relative '../../models/order'
+require_relative '../../models/order_detail'
 require_relative '../../db/mysql_connector'
 
 describe Item do
@@ -112,6 +113,62 @@ describe Item do
           expect(actual_result[i].customer_id).to eq(expected_result[i].customer_id)
           expect(actual_result[i].date).to eq(expected_result[i].date)
           expect(actual_result[i].total_price).to eq(expected_result[i].total_price)
+        end
+      end
+    end
+    describe '.find_order_with_details' do
+      context 'find order with item details based on order id' do
+        it 'should returning order with item details' do
+          Order.find_order_with_details(1)
+          id = 1
+          query_result_mock_order = [
+            { "id" => 1, "customer_id" => 1, "date" => "2021-07-01 01:01:01", "total_price" => 52000 }
+          ]
+
+          item_1 = Item.new(id: 1,
+                            name: "Nasi Goreng Gila",
+                            price: 25000
+          )
+
+          detail_1 = OrderDetail.new({ order_id: 1,
+                                       item: item_1,
+                                       quantity: 2
+                                     })
+
+          item_2 = Item.new(id: 1,
+                            name: "Ice Water",
+                            price: 2000
+          )
+
+          detail_2 = OrderDetail.new({ order_id: 1,
+                                       item: item_2,
+                                       quantity: 1
+                                     })
+          mock_detail_of_order = [detail_1, detail_2]
+
+          mock_client = double
+          allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+          allow(mock_client).to receive(:query).with("SELECT * FROM orders WHERE id = #{id}").and_return(query_result_mock_order)
+
+          allow(OrderDetail).to receive(:find_order_details_by_order_id).with(id).and_return(mock_detail_of_order)
+          actual_result = Order.find_order_with_details(1)
+
+          expected_result = Order.new({ id: 1, customer_id: 1, date: "2021-07-01 01:01:01", total_price: 52000 } )
+          expected_result.details = [detail_1, detail_2]
+          expect(actual_result.id).to eq(expected_result.id)
+          expect(actual_result.customer_id).to eq(expected_result.customer_id)
+          expect(actual_result.date).to eq(expected_result.date)
+          expect(actual_result.total_price).to eq(expected_result.total_price)
+
+          expect(actual_result.details.size).to eq(expected_result.details.size)
+          (0..actual_result.details.size - 1).each do |i|
+            expect(actual_result.details[i].order_id).to eq(expected_result.details[i].order_id)
+            expect(actual_result.details[i].item.id).to eq(expected_result.details[i].item.id)
+            expect(actual_result.details[i].item.name).to eq(expected_result.details[i].item.name)
+            expect(actual_result.details[i].item.price).to eq(expected_result.details[i].item.price)
+            expect(actual_result.details[i].item.categories).to eq(expected_result.details[i].item.categories)
+            expect(actual_result.details[i].quantity).to eq(expected_result.details[i].quantity)
+          end
         end
       end
     end
