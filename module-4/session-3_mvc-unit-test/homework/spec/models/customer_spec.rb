@@ -218,4 +218,19 @@ describe Item do
       end
     end
   end
+
+  describe '.update_customer' do
+    context 'update an customer' do
+      it 'should success update an customer' do
+        params = {
+          "id" => 1, "name" => "Budiawan", "phone" => "80123123123"
+        }
+        mock_client = double
+        allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+        expect(mock_client).to receive(:query).with("UPDATE customers SET name = '#{params['name']}', phone = #{params['phone']} WHERE id = #{params['id']}")
+
+        Customer.update_customer(params)
+      end
+    end
+  end
 end
