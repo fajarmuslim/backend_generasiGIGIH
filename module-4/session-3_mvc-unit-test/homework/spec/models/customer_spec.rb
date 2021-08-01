@@ -197,4 +197,25 @@ describe Item do
       end
     end
   end
+
+  describe '.find_customer_by_id' do
+    context 'find single customer by id' do
+      it 'should returning single customer based on id' do
+        id = 1
+        query_result_mock = [{ "id" => 1, "name" => "Budiawan", "phone" => "80123123123" }]
+
+        mock_client = double
+        allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+        allow(mock_client).to receive(:query).with("SELECT * FROM customers WHERE id = #{id}").and_return(query_result_mock)
+
+        actual_result = Customer.find_customer_by_id(1)
+        expected_result = Customer.new({ id: 1, name: "Budiawan", phone: "80123123123" })
+
+        expect(actual_result.id).to eq(expected_result.id)
+        expect(actual_result.name).to eq(expected_result.name)
+        expect(actual_result.phone).to eq(expected_result.phone)
+        expect(actual_result.orders).to eq(expected_result.orders)
+      end
+    end
+  end
 end
