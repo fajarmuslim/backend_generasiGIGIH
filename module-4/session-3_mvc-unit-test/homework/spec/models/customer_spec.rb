@@ -182,4 +182,19 @@ describe Item do
       end
     end
   end
+
+  describe '.delete_customer' do
+    context 'delete an customer' do
+      it 'should success delete an customer' do
+        id = 1
+
+        mock_client = double
+        allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+        expect(mock_client).to receive(:query).with("DELETE FROM orders WHERE customer_id = #{id}")
+        expect(mock_client).to receive(:query).with("DELETE FROM customers WHERE id = #{id}")
+
+        Customer.delete_customer(id)
+      end
+    end
+  end
 end
