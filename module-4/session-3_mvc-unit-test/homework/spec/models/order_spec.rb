@@ -173,4 +173,26 @@ describe Item do
       end
     end
   end
+
+  describe '.find_order_id' do
+    context 'find order id based on customer id, date, and price' do
+      it 'should returning order id based on customer id, date, and price' do
+        customer_id = 1
+        date = '2021-07-01 01:01:01'
+        total_price = 52000
+
+        query_result_mock_order = [
+          { "id" => 1, "customer_id" => customer_id, "date" => date, "total_price" => total_price }
+        ]
+
+        mock_client = double
+        allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+        allow(mock_client).to receive(:query).with("SELECT * FROM orders WHERE customer_id=#{customer_id} AND date='#{date}' AND total_price=#{total_price}").and_return(query_result_mock_order)
+
+        actual_id = Order.find_order_id(customer_id, date, total_price)
+        expected_id = 1
+        expect(actual_id).to eq(expected_id)
+      end
+    end
+  end
 end
