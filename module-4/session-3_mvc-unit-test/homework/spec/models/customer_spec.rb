@@ -1,4 +1,5 @@
 require_relative '../../models/customer'
+require_relative '../../models/order'
 require_relative '../../db/mysql_connector'
 
 describe Item do
@@ -79,7 +80,6 @@ describe Item do
         expected_customer_2 = Customer.new({ id: 2, name: "Mary Jones", phone: "81123123123" })
         expected_customer_3 = Customer.new({ id: 3, name: "Bima", phone: "82123123123" })
 
-
         expected_result = [
           expected_customer_1,
           expected_customer_2,
@@ -92,6 +92,50 @@ describe Item do
           expect(actual_result[i].name).to eq(expected_result[i].name)
           expect(actual_result[i].phone).to eq(expected_result[i].phone)
           expect(actual_result[i].orders).to eq(expected_result[i].orders)
+        end
+      end
+    end
+  end
+
+  describe '.find_customer_with_orders_by_customer_id' do
+    context 'find customer with orders by customer id' do
+      it 'should returning customers with orders' do
+        id = 1
+        query_result_mock_customer = [
+          { "id" => 1, "name" => "Budiawan", "phone" => "80123123123" }
+        ]
+
+        order_1 = Order.new({ id: 1,
+                              customer_id: 1,
+                              date: '2021-07-01 01:01:01',
+                              total_price: 52000
+                            })
+
+        order_2 = Order.new({ id: 2,
+                              customer_id: 1,
+                              date: '2021-07-01 02:02:02',
+                              total_price: 71000
+                            })
+        mock_order_of_customers = [order_1, order_2]
+
+        mock_client = double
+        allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+        allow(mock_client).to receive(:query).with("SELECT * FROM customers WHERE id = #{id}").and_return(query_result_mock_customer)
+
+        allow(Order).to receive(:find_orders_by_customer_id).with(id).and_return(mock_order_of_customers)
+        actual_result = Customer.find_customer_with_orders_by_customer_id(1)
+
+        expected_result = Customer.new({ id: 1, name: "Budiawan", phone: "80123123123" })
+        expected_result.orders = [order_1, order_2]
+        expect(actual_result.id).to eq(expected_result.id)
+        expect(actual_result.name).to eq(expected_result.name)
+        expect(actual_result.phone).to eq(expected_result.phone)
+
+        (0..actual_result.orders.size-1).each do |i|
+          expect(actual_result.orders[i].id).to eq(expected_result.orders[i].id)
+          expect(actual_result.orders[i].customer_id).to eq(expected_result.orders[i].customer_id)
+          expect(actual_result.orders[i].date).to eq(expected_result.orders[i].date)
+          expect(actual_result.orders[i].details).to eq(expected_result.orders[i].details)
         end
       end
     end
