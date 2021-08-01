@@ -131,7 +131,7 @@ describe Item do
         expect(actual_result.name).to eq(expected_result.name)
         expect(actual_result.phone).to eq(expected_result.phone)
 
-        (0..actual_result.orders.size-1).each do |i|
+        (0..actual_result.orders.size - 1).each do |i|
           expect(actual_result.orders[i].id).to eq(expected_result.orders[i].id)
           expect(actual_result.orders[i].customer_id).to eq(expected_result.orders[i].customer_id)
           expect(actual_result.orders[i].date).to eq(expected_result.orders[i].date)
@@ -164,6 +164,21 @@ describe Item do
           expect(actual_array[i].phone).to eq(expected_array[i].phone)
           expect(actual_array[i].orders).to eq(expected_array[i].orders)
         end
+      end
+    end
+  end
+
+  describe '#save' do
+    context 'valid input' do
+      it 'should save data to db' do
+        params = { id: 1, name: "Budiawan", phone: "80123123123" }
+        customer = Customer.new(params)
+
+        mock_client = double
+        allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+
+        expect(mock_client).to receive(:query).with("INSERT INTO customers(name, phone) VALUES ('#{customer.name}', #{customer.phone})")
+        customer.save
       end
     end
   end
